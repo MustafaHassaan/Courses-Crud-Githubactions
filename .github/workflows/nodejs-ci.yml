@@ -1,0 +1,34 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [main] # هيشتغل عند أي push على الفرع main
+  pull_request:
+    branches: [main] # وهيشتغل عند أي PR للفرع main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      # 1️⃣ checkout الكود
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ تثبيت Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # 3️⃣ تثبيت dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4️⃣ تشغيل الاختبارات
+      - name: Run tests
+        run: npm test
